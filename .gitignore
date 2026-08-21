@@ -1,1 +1,62 @@
 .sfo/logs/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments (uv creates .venv)
+.venv/
+venv/
+env/
+
+# Build and distribution output
+build/
+dist/
+wheels/
+*.egg-info/
+.eggs/
+*.egg
+
+# Tool caches
+.uv-cache/
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.hypothesis/
+.tox/
+
+# Test coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Runtime artifacts of the tool itself. shotname writes cache, journal, and plan
+# files to ~/.local/state/shotname/, but a run invoked with an explicit output
+# path can drop these into the repo, and neither belongs in history.
+plan.jsonl
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+
+# Local secrets — the Anthropic API key must never reach a commit
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors
+.idea/
+.vscode/
+*.swp
