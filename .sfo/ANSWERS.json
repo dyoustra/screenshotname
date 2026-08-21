@@ -1,0 +1,44 @@
+{
+  "answers": [
+    {
+      "questionId": "Q-001",
+      "answer": "d",
+      "questionText": "Which model and image-resolution tier should be the default for naming?"
+    },
+    {
+      "questionId": "Q-002",
+      "answer": "b",
+      "questionText": "Synchronous API with bounded concurrency, or the Batch API?"
+    },
+    {
+      "questionId": "Q-003",
+      "answer": "A",
+      "questionText": "Should --apply be able to run without a saved plan, or must it execute a plan file?"
+    },
+    {
+      "questionId": "Q-004",
+      "answer": "A",
+      "questionText": "Should v1 include a corpus-level pass to fight generic-name collapse?"
+    },
+    {
+      "questionId": "Q-005",
+      "answer": "A",
+      "questionText": "How aggressively should the tool abstain from naming?"
+    },
+    {
+      "questionId": "Q-006",
+      "answer": "A",
+      "questionText": "How should non-Latin text in a screenshot be handled in the filename?"
+    },
+    {
+      "questionId": "Q-007",
+      "answer": "A",
+      "questionText": "Should --max-cost have a default ceiling, or be opt-in?"
+    },
+    {
+      "questionId": "Q-008",
+      "answer": "A",
+      "questionText": "Which Apple OCR path should stage 1 use?"
+    }
+  ]
+}
