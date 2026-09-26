@@ -1,0 +1,32 @@
+[project]
+name = "shotname"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic",
+    "anyascii",
+    "httpx",
+    "ocrmac",
+    "pillow",
+    "pydantic",
+    "typer",
+]
+
+[project.scripts]
+shotname = "shotname.cli:main"
+
+[dependency-groups]
+dev = ["pytest", "pytest-asyncio", "ruff", "mypy"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/shotname"]
+
+[tool.mypy]
+exclude = ['^\.venv/', '^build/', '^dist/']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

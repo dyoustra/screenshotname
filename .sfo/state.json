@@ -1,7 +1,7 @@
 {
   "id": "screenshot-content-renamer-fee869",
   "title": "Screenshot Content Renamer",
-  "currentStage": "test-write",
+  "currentStage": "test-repair",
   "status": "running",
   "attempts": {
     "research": 1
@@ -9,8 +9,8 @@
   "sliceAttempts": {},
   "slicesPassed": [],
   "slicesFailed": [],
-  "pid": 59425,
-  "heartbeatAt": "2026-09-26T17:35:44.578Z",
+  "pid": 30655,
+  "heartbeatAt": "2026-09-26T18:04:31.665Z",
   "createdAt": "2026-08-21T16:31:49.464Z",
-  "updatedAt": "2026-09-26T17:03:44.467Z"
+  "updatedAt": "2026-09-26T17:43:01.644Z"
 }
