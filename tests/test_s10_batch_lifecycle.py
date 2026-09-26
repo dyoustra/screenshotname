@@ -32,7 +32,13 @@ from shotname.plan import Action
 from shotname.prompt import BUILTIN_PROMPT_VERSION
 from shotname.settings import DEFAULT_MODEL, Resolution
 from tests.conftest import Inject
-from tests.support.cli import output_of, plan_records, proposed_names, records_by_name, run_cli
+from tests.support.cli import (
+    output_of,
+    plan_records,
+    proposed_names,
+    records_by_name,
+    run_cli,
+)
 from tests.support.corpus import build_bulk_corpus
 from tests.support.fakes import (
     FakeOcr,

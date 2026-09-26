@@ -104,7 +104,8 @@ def test_ac011_localized_capture_date_is_parsed() -> None:
 
 def test_ac011_unparseable_filename_falls_back_to_birthtime_in_local_time() -> None:
     """AC-011: otherwise st_birthtime, rendered in the machine's local zone."""
-    expected = datetime.fromtimestamp(BIRTHTIME).strftime("%Y-%m-%d")
+    # Local time is the requirement (AC-011), not an oversight.
+    expected = datetime.fromtimestamp(BIRTHTIME).strftime("%Y-%m-%d")  # noqa: DTZ006
 
     assert parse_capture_date("slack thread from january.png") is None
     assert date_prefix("slack thread from january.png", birthtime=BIRTHTIME) == expected
