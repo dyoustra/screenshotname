@@ -12,9 +12,21 @@ the name (AC-016, AC-027, AC-058, AC-059).
 
 from __future__ import annotations
 
+import errno
+import os
 from pathlib import Path
 
 
 def rename_file(old: Path, new: Path) -> None:
-    """Rename `old` to `new` without following symlinks or replacing `new`."""
-    raise NotImplementedError
+    """Rename `old` to `new` without following symlinks or replacing `new`.
+
+    `rename(2)` operates on the directory entry, so a symlink is moved rather
+    than followed; but it also replaces an existing destination silently, and
+    macOS exposes no `RENAME_EXCL` equivalent to Python. The `lexists` check is
+    therefore the guard, and it leaves a window another process could win. The
+    collision layer, not this function, is what makes the destination free in
+    the first place (AC-025, AC-026); this is the backstop under it.
+    """
+    if os.path.lexists(new):
+        raise FileExistsError(errno.EEXIST, os.strerror(errno.EEXIST), str(new))
+    os.rename(old, new)
