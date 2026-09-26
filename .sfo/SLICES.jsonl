@@ -1,0 +1,11 @@
+{"id":"S-01","name":"Enumeration and candidate identification","criterionIds":["AC-001","AC-002","AC-003","AC-004","AC-005","AC-006","AC-007","AC-008","AC-009"],"prerequisites":[]}
+{"id":"S-02","name":"Slug composition and text sanitization","criterionIds":["AC-012","AC-015","AC-017","AC-019","AC-020","AC-021","AC-022"],"prerequisites":[]}
+{"id":"S-03","name":"Filename assembly: date prefix, extension, byte limit, determinism","criterionIds":["AC-010","AC-011","AC-013","AC-014","AC-016","AC-018"],"prerequisites":["S-02"]}
+{"id":"S-04","name":"Backend interface, cost accounting, and failure modes","criterionIds":["AC-049","AC-050","AC-051","AC-052","AC-053","AC-054","AC-055","AC-056","AC-057"],"prerequisites":["S-01"]}
+{"id":"S-05","name":"Dry run, plan output, and apply","criterionIds":["AC-028","AC-029","AC-030","AC-031","AC-032","AC-033","AC-034","AC-078","AC-079"],"prerequisites":["S-01","S-03","S-04"]}
+{"id":"S-06","name":"Collision resolution and metadata-preserving rename","criterionIds":["AC-023","AC-024","AC-025","AC-026","AC-027","AC-058","AC-059"],"prerequisites":["S-05"]}
+{"id":"S-07","name":"Journal, undo, cache, and resume","criterionIds":["AC-035","AC-036","AC-037","AC-038","AC-039","AC-040","AC-041","AC-042","AC-043"],"prerequisites":["S-05"]}
+{"id":"S-08","name":"Abstention","criterionIds":["AC-044","AC-045","AC-046","AC-047","AC-048","AC-080"],"prerequisites":["S-04","S-05"]}
+{"id":"S-09","name":"Batch dispatch and request construction","criterionIds":["AC-065","AC-066","AC-067","AC-068","AC-069"],"prerequisites":["S-04","S-05"]}
+{"id":"S-10","name":"Batch job lifecycle: submit, record, collect, resume","criterionIds":["AC-070","AC-071","AC-072","AC-073","AC-074","AC-075"],"prerequisites":["S-07","S-09"]}
+{"id":"S-11","name":"Sampling, run settings, and completion report","criterionIds":["AC-060","AC-061","AC-062","AC-063","AC-064","AC-076","AC-077"],"prerequisites":["S-04","S-05"]}
