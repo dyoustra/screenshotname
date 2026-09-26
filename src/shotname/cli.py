@@ -13,7 +13,7 @@ suite.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 
@@ -58,7 +58,7 @@ def run(
         typer.Option("--apply", help="Actually rename. Off by default."),
     ] = False,
     plan: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option("--plan", help="Replay renames from a previously written plan."),
     ] = None,
     all_images: Annotated[
@@ -71,23 +71,29 @@ def run(
     ] = False,
     materialize: Annotated[
         bool,
-        typer.Option("--materialize", help="Read iCloud-evicted files instead of skipping."),
+        typer.Option(
+            "--materialize", help="Read iCloud-evicted files instead of skipping."
+        ),
     ] = False,
     sample: Annotated[
-        Optional[int],
-        typer.Option("--sample", help="Process N files synchronously, changing nothing."),
+        int | None,
+        typer.Option(
+            "--sample", help="Process N files synchronously, changing nothing."
+        ),
     ] = None,
     seed: Annotated[
         int,
         typer.Option("--seed", help="Seed for sample selection."),
     ] = DEFAULT_SEED,
     max_cost: Annotated[
-        Optional[float],
+        float | None,
         typer.Option("--max-cost", help="Abort if the estimate exceeds this many USD."),
     ] = None,
     min_ocr_chars: Annotated[
         int,
-        typer.Option("--min-ocr-chars", help="OCR characters below which a capture may abstain."),
+        typer.Option(
+            "--min-ocr-chars", help="OCR characters below which a capture may abstain."
+        ),
     ] = DEFAULT_MIN_OCR_CHARS,
     model: Annotated[
         str,
@@ -99,11 +105,15 @@ def run(
     ] = Resolution.STANDARD,
     sync: Annotated[
         bool,
-        typer.Option("--sync", help="Dispatch synchronously instead of via the Batch API."),
+        typer.Option(
+            "--sync", help="Dispatch synchronously instead of via the Batch API."
+        ),
     ] = False,
     wait: Annotated[
         bool,
-        typer.Option("--wait", help="Poll submitted jobs to completion in this invocation."),
+        typer.Option(
+            "--wait", help="Poll submitted jobs to completion in this invocation."
+        ),
     ] = False,
     poll_interval: Annotated[
         float,
@@ -115,7 +125,9 @@ def run(
     ] = DEFAULT_CONCURRENCY,
     local: Annotated[
         bool,
-        typer.Option("--local", help="Use the local Ollama backend; nothing leaves the machine."),
+        typer.Option(
+            "--local", help="Use the local Ollama backend; nothing leaves the machine."
+        ),
     ] = False,
     ollama_host: Annotated[
         str,
@@ -126,12 +138,14 @@ def run(
         typer.Option("--ollama-model", help="Local vision model to use."),
     ] = DEFAULT_OLLAMA_MODEL,
     prompt_template: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option("--prompt-template", help="Use the prompt at this path."),
     ] = None,
     print_prompt: Annotated[
         bool,
-        typer.Option("--print-prompt", help="Write the built-in prompt to stdout and exit."),
+        typer.Option(
+            "--print-prompt", help="Write the built-in prompt to stdout and exit."
+        ),
     ] = False,
 ) -> None:
     """Propose names for the screenshots in ROOT, renaming only with --apply."""
@@ -164,7 +178,7 @@ def run(
 @app.command()
 def undo(
     run_id: Annotated[
-        Optional[str],
+        str | None,
         typer.Option("--run-id", help="Undo this run instead of the most recent one."),
     ] = None,
 ) -> None:
