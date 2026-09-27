@@ -1,0 +1,2 @@
+{"seam":"anthropic-batch","check":"submit a one-request batch","level":"accepted","detail":"batch msgbatch_01P4NzNd2cAk35D9pcBnJpk4 accepted","attempt":1,"at":"2026-09-27T20:40:43.486Z"}
+{"seam":"anthropic-batch","check":"results parse","level":"completed","detail":"batch msgbatch_01P4NzNd2cAk35D9pcBnJpk4 returned 'blank'","attempt":1,"at":"2026-09-27T20:40:43.486Z"}

@@ -19,5 +19,8 @@
   "tests/test_s08_abstention.py": "0f7ebd3b174a074cf0b935468c985558465c3ed066a9f6fb23ed2368055dcc0f",
   "tests/test_s09_batch_dispatch.py": "236451ab865e2891e4b0109b8a01c057c72f9548fe1242dd115c69e1409d4cda",
   "tests/test_s10_batch_lifecycle.py": "8d1f6efb0f8b1c7683d06abefbe19e84857e7779dec2cdd9b89cbe6212a1b26a",
-  "tests/test_s11_reporting.py": "771980c0edacaa7513085e8d878e43ac1f187f3e62037f49f8786f1a3ff12b5c"
+  "tests/test_s11_reporting.py": "771980c0edacaa7513085e8d878e43ac1f187f3e62037f49f8786f1a3ff12b5c",
+  "smoke/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "smoke/_report.py": "df63a8b97a8ac8606ca769ccba8636f277a96c1f27cfa5ebb944916f433fcb33",
+  "smoke/test_smoke_anthropic_batch.py": "c9cde877fb4f4a3808e77fa7dd0b20008c982599ec116703287b063a2f7a69ec"
 }
