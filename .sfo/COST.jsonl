@@ -25,3 +25,4 @@
 {"stage":"build-S-09","at":"2026-09-27T03:30:23.114Z","ok":true,"via":"cli","usage":{"costUsd":0.9593125,"durationMs":61569,"numTurns":21,"inputTokens":32,"outputTokens":4083,"cacheCreationInputTokens":47928,"cacheReadInputTokens":755595}}
 {"stage":"build-S-10","at":"2026-09-27T03:32:40.396Z","ok":true,"via":"cli","usage":{"costUsd":1.327302,"durationMs":133714,"numTurns":29,"inputTokens":44,"outputTokens":6547,"cacheCreationInputTokens":55128,"cacheReadInputTokens":1224254}}
 {"stage":"build-S-11","at":"2026-09-27T03:34:22.867Z","ok":true,"via":"cli","usage":{"costUsd":1.0322485,"durationMs":98455,"numTurns":25,"inputTokens":36,"outputTokens":5957,"cacheCreationInputTokens":48711,"cacheReadInputTokens":792067}}
+{"stage":"review","at":"2026-09-27T03:41:42.187Z","ok":true,"via":"cli","usage":{"costUsd":3.8515105,"durationMs":436467,"numTurns":47,"inputTokens":64,"outputTokens":30088,"cacheCreationInputTokens":145012,"cacheReadInputTokens":3297741}}
