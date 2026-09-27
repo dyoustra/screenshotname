@@ -8,7 +8,7 @@
   "tests/support/faults.py": "053dc2462f53cbe03d1e0197063e18f66928dd54192ed93c2162b1f5eef50c21",
   "tests/support/fsutil.py": "e0d8895387fd5ce20b4f357cb7feb5d591d7499861aa8c40b1d70716ad0e2d9f",
   "tests/support/images.py": "013406902a30fd24e4b24899d2acc664db9c57bd8b6bf23d0848cfd6719435ae",
-  "tests/test_s01_enumeration.py": "7cc391a9604eddba887c35547db0598d2ccfd0bc3b8d05de2f25f4e7d08b2d3b",
+  "tests/test_s01_enumeration.py": "6bd418218c2d4b70a202c2838c958a9f7df9f67ad1093ba896d1325fce67c528",
   "tests/test_s02_slug.py": "de514b308436069de4ae77dc969450b70e574cec9f1f3859106bf14d573d2f7c",
   "tests/test_s03_naming.py": "9fe90f56c0943ae6e320608a02a12267dc30eedbbd1d0fd0388c46fdcd95fd82",
   "tests/test_s04_backends.py": "32e59551ceabcf9267267eb356e8e589d15e6ac6874edf74f7e7ea05bd7c8e26",

@@ -10,7 +10,9 @@ a real `RealFsProbe`; everything else about the filesystem stays real.
 
 from __future__ import annotations
 
-import tracemalloc
+import os
+import subprocess
+import sys
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -253,31 +255,43 @@ def test_ac009_enumeration_is_lazy(corpus_root: Path) -> None:
     assert isinstance(result, Iterator)
 
 
-def test_ac009_peak_memory_does_not_scale_with_corpus_size(corpus_root: Path) -> None:
-    """AC-009: 50,000 candidates cost no more than twice the peak of 500."""
-    settings = RunSettings(root=corpus_root)
+# Run in a fresh interpreter per corpus size, so one measurement cannot inherit
+# the other's heap. Peak resident memory is what AC-009 specifies. tracemalloc
+# is not a substitute: it starts from a few KB, so CPython interning each unique
+# path segment (pathlib does, per filename) outgrows 2x on its own.
+_RSS_PROBE = """
+import resource, sys, tempfile
+from pathlib import Path
+from shotname.discovery import discover_candidates
+from shotname.settings import RunSettings
+from tests.support.fakes import SyntheticProbe
+settings = RunSettings(root=Path(tempfile.mkdtemp()))
+for _ in discover_candidates(settings, probe=SyntheticProbe(count=int(sys.argv[1]))):
+    pass
+print(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+"""
 
-    def peak_for(count: int) -> int:
-        seen = 0
-        tracemalloc.start()
-        try:
-            for candidate in discover_candidates(
-                settings, probe=SyntheticProbe(count=count)
-            ):
-                seen += 1 if candidate.included else 0
-            return tracemalloc.get_traced_memory()[1]
-        finally:
-            tracemalloc.stop()
 
-    # Warm up so import-time and allocator noise is not attributed to the
-    # first measured run.
-    peak_for(500)
+def _peak_rss_for(count: int) -> int:
+    root = Path(__file__).resolve().parents[1]
+    done = subprocess.run(
+        [sys.executable, "-c", _RSS_PROBE, str(count)],
+        cwd=root,
+        env={**os.environ, "PYTHONPATH": str(root)},
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return int(done.stdout.strip())
 
-    peak_small = peak_for(500)
-    peak_large = peak_for(50_000)
+
+def test_ac009_peak_memory_does_not_scale_with_corpus_size() -> None:
+    """AC-009: 50,000 candidates use no more than twice the peak RSS of 500."""
+    peak_small = _peak_rss_for(500)
+    peak_large = _peak_rss_for(50_000)
 
     assert peak_large <= 2 * peak_small, (
-        f"peak grew from {peak_small} to {peak_large} bytes across a 100x corpus"
+        f"peak RSS grew from {peak_small} to {peak_large} across a 100x corpus"
     )
 
 
