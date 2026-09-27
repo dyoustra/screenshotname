@@ -8,6 +8,7 @@
   "tests/support/faults.py": "053dc2462f53cbe03d1e0197063e18f66928dd54192ed93c2162b1f5eef50c21",
   "tests/support/fsutil.py": "e0d8895387fd5ce20b4f357cb7feb5d591d7499861aa8c40b1d70716ad0e2d9f",
   "tests/support/images.py": "013406902a30fd24e4b24899d2acc664db9c57bd8b6bf23d0848cfd6719435ae",
+  "tests/test_regression_batch_custom_id.py": "cd62d1ec3e24c04dc2b53e3444f547fda16b6e9dbfa4aa21b12c612339df85c9",
   "tests/test_s01_enumeration.py": "6bd418218c2d4b70a202c2838c958a9f7df9f67ad1093ba896d1325fce67c528",
   "tests/test_s02_slug.py": "de514b308436069de4ae77dc969450b70e574cec9f1f3859106bf14d573d2f7c",
   "tests/test_s03_naming.py": "9fe90f56c0943ae6e320608a02a12267dc30eedbbd1d0fd0388c46fdcd95fd82",

@@ -8,6 +8,11 @@ from pathlib import Path
 #: Hex characters of the content hash used as a collision suffix (AC-023).
 SHORT_HASH_CHARS = 6
 
+#: 32 bytes is 64 hex characters: the Batch API rejects a `custom_id` longer
+#: than 64, and the content hash is the `custom_id` (AC-068). blake2b's default
+#: is 64 bytes, twice the limit.
+DIGEST_BYTES = 32
+
 #: Read size. Fixed, so hashing a 40 MB Retina capture costs the same resident
 #: memory as hashing a 4 KB one (AC-009).
 CHUNK_BYTES = 1 << 20
@@ -15,7 +20,7 @@ CHUNK_BYTES = 1 << 20
 
 def content_hash(path: Path) -> str:
     """The BLAKE2b hex digest of `path`'s contents, read in bounded chunks."""
-    digest = hashlib.blake2b()
+    digest = hashlib.blake2b(digest_size=DIGEST_BYTES)
     with path.open("rb") as handle:
         while chunk := handle.read(CHUNK_BYTES):
             digest.update(chunk)
