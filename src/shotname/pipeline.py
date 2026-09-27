@@ -138,10 +138,19 @@ def _preflight(settings: RunSettings, environment: RunEnvironment) -> None:
         raise UsageError(API_KEY_HINT)
 
 
-def _discover(settings: RunSettings, deps: Deps) -> list[Candidate]:
-    """Enumerate, turning a TCC denial into a message rather than a traceback."""
+def _discover(settings: RunSettings, deps: Deps, *, state: Path) -> list[Candidate]:
+    """Enumerate, turning a TCC denial into a message rather than a traceback.
+
+    The journal is consulted here so that a second run over a directory this tool
+    has already renamed proposes nothing for those files (AC-041).
+    """
+    already_renamed = Journal(journal_path(state)).renamed_paths()
     try:
-        return list(discover_candidates(settings, probe=deps.probe))
+        return list(
+            discover_candidates(
+                settings, probe=deps.probe, already_renamed=already_renamed
+            )
+        )
     except OSError as failure:
         if isinstance(failure, PermissionError) or failure.errno in {
             errno.EPERM,
@@ -875,7 +884,7 @@ def execute_run(settings: RunSettings, deps: Deps) -> int:
     if settings.plan is not None:
         return _replay(settings, state)
 
-    candidates = _discover(settings, deps)
+    candidates = _discover(settings, deps, state=state)
     typer.echo(format_discovery_summary(summarize(candidates)))
 
     included = [candidate for candidate in candidates if candidate.included]

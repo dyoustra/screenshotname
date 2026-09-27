@@ -251,17 +251,31 @@ def matches_screenshot_name(name: str) -> bool:
 
 
 def discover_candidates(
-    settings: RunSettings, *, probe: FsProbe
+    settings: RunSettings,
+    *,
+    probe: FsProbe,
+    already_renamed: frozenset[str] = frozenset(),
 ) -> Iterator[Candidate]:
     """Walk `settings.root` and classify each file, lazily (AC-009).
 
     Every inspected file is yielded, included or not, because the plan records a
-    reason per file. The order of the three tests is load-bearing: sniffing the
-    format is the only step that opens the file, so it has to come after the
-    dataless check for AC-006 to hold.
+    reason per file. The order of the tests is load-bearing: sniffing the format
+    is the only step that opens the file, so it has to come after the dataless
+    check for AC-006 to hold.
+
+    `already_renamed` holds the NFC-normalized paths the journal says this tool
+    has renamed a file to — `Journal.renamed_paths()`. They are excluded first,
+    ahead of `--all-images`, because a name this tool chose is not a name it has
+    anything left to say about (AC-041).
     """
     for path in probe.walk(settings.root, recursive=settings.recursive):
         facts = probe.facts(path)
+
+        if _normalized(path) in already_renamed:
+            yield Candidate(
+                path, facts, included=False, excluded=Reason.ALREADY_RENAMED
+            )
+            continue
 
         is_screenshot = facts.is_screen_capture or matches_screenshot_name(path.name)
         if not (is_screenshot or settings.all_images):

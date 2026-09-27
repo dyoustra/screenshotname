@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -94,3 +95,16 @@ class Journal:
     def records_for(self, run_id: str) -> list[JournalRecord]:
         """Just one run's records, for `undo --run-id` (AC-038)."""
         return [record for record in self.records() if record.run_id == run_id]
+
+    def renamed_paths(self) -> frozenset[str]:
+        """Every path this tool has ever renamed a file *to*, NFC-normalized.
+
+        A file sitting at one of these paths bears a name this tool chose, so a
+        later run over the same directory has nothing to propose for it (AC-041).
+        Normalized because the journal's text and a fresh directory listing can
+        disagree on the Unicode form of the same name.
+        """
+        return frozenset(
+            unicodedata.normalize("NFC", str(record.new_path))
+            for record in self.records()
+        )

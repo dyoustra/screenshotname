@@ -31,6 +31,7 @@ from .settings import (
     Resolution,
     RunSettings,
 )
+from .undo import execute_undo
 
 app = typer.Typer(
     add_completion=False,
@@ -59,7 +60,11 @@ def _dispatch_run(settings: RunSettings, deps: Deps) -> int:
 
 def _dispatch_undo(run_id: str | None) -> int:
     """Execute one `undo` invocation and return the process exit code."""
-    raise NotImplementedError
+    try:
+        return execute_undo(run_id)
+    except ShotnameError as failure:
+        typer.echo(str(failure), err=True)
+        return failure.exit_code
 
 
 @app.command()

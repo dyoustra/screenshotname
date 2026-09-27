@@ -12,6 +12,9 @@ EXIT_USAGE = 2
 #: The target directory could not be read. On macOS this is almost always TCC.
 EXIT_PERMISSION = 3
 
+#: `undo` left at least one file alone: changed contents, or an occupied name.
+EXIT_UNDO_INCOMPLETE = 4
+
 #: SIGINT. The shell convention is 128 + SIGINT.
 EXIT_INTERRUPTED = 130
 
