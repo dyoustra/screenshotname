@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
+from .settings import API_KEY_ENV_VAR
+
 #: Bad invocation: a missing API key, a conflicting flag, an unreadable plan.
 EXIT_USAGE = 2
 
@@ -40,3 +44,29 @@ class BackendUnavailableError(ShotnameError):
 
 class SchemaInvalidError(ShotnameError):
     """A model response did not validate against the name-suggestion schema."""
+
+
+#: Where a human actually grants the permission, spelled as the UI spells it.
+FULL_DISK_ACCESS_PANE = "System Settings > Privacy & Security > Full Disk Access"
+
+#: What to do about a missing credential, naming the variable to set (AC-050).
+API_KEY_HINT = (
+    f"no API key found: set {API_KEY_ENV_VAR} in the environment, "
+    "or pass --local to name screenshots with a local Ollama model instead. "
+    "Nothing was read and nothing was renamed."
+)
+
+
+def full_disk_access_message(root: Path) -> str:
+    """The whole user experience of the most likely first-run failure (AC-049).
+
+    macOS TCC protects `~/Desktop`, `~/Documents`, and `~/Downloads`, and `sudo`
+    does not help: the permission belongs to the terminal application that
+    launched this process, not to the user.
+    """
+    return (
+        f"macOS refused permission to read {root}.\n"
+        f"Grant Full Disk Access to the terminal application you ran this from, in:\n"
+        f"    {FULL_DISK_ACCESS_PANE}\n"
+        "Then quit and reopen that application and run the command again."
+    )

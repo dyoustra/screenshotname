@@ -7,12 +7,14 @@ Vision, or query Spotlight by accident.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 
-from .discovery import FsProbe
+from .discovery import FsProbe, RealFsProbe
 from .model import Transport
-from .ocr import Ocr
-from .settings import RunSettings
+from .ocr import Ocr, VisionOcr
+from .settings import API_KEY_ENV_VAR, RunSettings
+from .transports import AnthropicTransport, OllamaTransport
 
 
 @dataclass(frozen=True)
@@ -30,4 +32,11 @@ def default_deps(settings: RunSettings) -> Deps:
     The transport is the cloud one unless `--local` selected Ollama; both satisfy
     the same protocol, which is what AC-057 checks.
     """
-    raise NotImplementedError
+    transport: Transport
+    if settings.local:
+        transport = OllamaTransport(
+            host=settings.ollama_host, model=settings.ollama_model
+        )
+    else:
+        transport = AnthropicTransport(api_key=os.environ.get(API_KEY_ENV_VAR))
+    return Deps(probe=RealFsProbe(), ocr=VisionOcr(), transport=transport)

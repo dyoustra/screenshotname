@@ -34,12 +34,12 @@ class OcrResult:
     @property
     def text(self) -> str:
         """The lines joined by newlines: what the model prompt embeds."""
-        raise NotImplementedError
+        return "\n".join(line.text for line in self.lines)
 
     @property
     def char_count(self) -> int:
         """Total recognized characters, the quantity `--min-ocr-chars` bounds."""
-        raise NotImplementedError
+        return sum(len(line.text) for line in self.lines)
 
 
 class Ocr(Protocol):
@@ -55,4 +55,34 @@ class VisionOcr:
         self.languages = tuple(languages) if languages is not None else ()
 
     def recognize(self, path: Path) -> OcrResult:
-        raise NotImplementedError
+        """Recognize `path` at its native resolution, top line first.
+
+        `ocrmac` is imported here rather than at module scope so that importing
+        `shotname` does not pull in pyobjc and the Vision framework on a machine
+        that is only ever going to run `--local` or the test suite.
+        """
+        from ocrmac import ocrmac
+
+        annotations = ocrmac.OCR(
+            str(path),
+            recognition_level="accurate",
+            language_preference=list(self.languages) or None,
+        ).recognize()
+        # Vision's origin is bottom-left, so the topmost line is the one with the
+        # largest y. The app-first rule depends on that ordering (AC-019).
+        ordered = sorted(annotations, key=lambda item: -float(item[2][1]))
+        return OcrResult(
+            lines=tuple(
+                OcrLine(
+                    text=str(text),
+                    confidence=float(confidence),
+                    bbox=(
+                        float(bbox[0]),
+                        float(bbox[1]),
+                        float(bbox[2]),
+                        float(bbox[3]),
+                    ),
+                )
+                for text, confidence, bbox in ordered
+            )
+        )

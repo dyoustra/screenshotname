@@ -12,9 +12,15 @@ Comparison is case-folded and NFC-normalized, because on APFS
 
 from __future__ import annotations
 
+import unicodedata
+from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePath
+
+from .errors import ShotnameError
+from .hashing import SHORT_HASH_CHARS, short_hash
+from .naming import fit_to_byte_limit
 
 
 @dataclass(frozen=True)
@@ -28,7 +34,14 @@ class Proposal:
 
 def normalize_for_comparison(name: str) -> str:
     """Case-fold and NFC-normalize, so APFS-equal names compare equal (AC-025)."""
-    raise NotImplementedError
+    return unicodedata.normalize("NFC", name).casefold()
+
+
+def _with_suffix(name: str, suffix: str) -> str:
+    """Insert `-suffix` before the extension, within the 255-byte limit."""
+    extension = PurePath(name).suffix
+    stem = name[: len(name) - len(extension)] if extension else name
+    return fit_to_byte_limit(stem, f"-{suffix}{extension}")
 
 
 def resolve_collisions(
@@ -39,4 +52,32 @@ def resolve_collisions(
     `existing_names` are the directory entries the run is *not* renaming, which
     must never be clobbered (AC-026).
     """
-    raise NotImplementedError
+    wanted = Counter(normalize_for_comparison(p.proposed_name) for p in proposals)
+    taken = {normalize_for_comparison(name) for name in existing_names}
+
+    resolved: dict[Path, str] = {}
+    for proposal in proposals:
+        name = proposal.proposed_name
+        contested = wanted[normalize_for_comparison(name)] > 1
+        # Two proposals wanting the same name are symmetric: neither has a claim
+        # on the bare form, so both are suffixed (AC-023). A single proposal is
+        # only suffixed when something already on disk holds the name (AC-026).
+        if contested or normalize_for_comparison(name) in taken:
+            name = _with_suffix(name, short_hash(proposal.content_hash))
+        length = SHORT_HASH_CHARS
+        while normalize_for_comparison(name) in taken:
+            # Only reachable when two files share a six-hex prefix, or when a
+            # file already on disk sits on the suffixed name. Lengthening the
+            # suffix keeps the outcome a function of the contents (AC-024).
+            length += 1
+            if length > len(proposal.content_hash):
+                raise ShotnameError(
+                    f"cannot find a free name for {proposal.path}: "
+                    f"{proposal.proposed_name!r} is taken under every suffix"
+                )
+            name = _with_suffix(
+                proposal.proposed_name, short_hash(proposal.content_hash, length=length)
+            )
+        resolved[proposal.path] = name
+        taken.add(normalize_for_comparison(name))
+    return resolved

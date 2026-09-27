@@ -18,6 +18,8 @@ from typing import Annotated
 import typer
 
 from .deps import Deps, default_deps
+from .errors import EXIT_INTERRUPTED, ShotnameError
+from .pipeline import execute_run
 from .settings import (
     DEFAULT_CONCURRENCY,
     DEFAULT_MIN_OCR_CHARS,
@@ -38,8 +40,21 @@ app = typer.Typer(
 
 
 def _dispatch_run(settings: RunSettings, deps: Deps) -> int:
-    """Execute one `run` invocation and return the process exit code."""
-    raise NotImplementedError
+    """Execute one `run` invocation and return the process exit code.
+
+    Every error the tool understands is reported as a message and an exit code
+    here, which is what keeps a traceback off the screen for the failures a user
+    can actually do something about — a missing key, a TCC denial (AC-049,
+    AC-050). Anything else is a bug and is left to propagate.
+    """
+    try:
+        return execute_run(settings, deps)
+    except ShotnameError as failure:
+        typer.echo(str(failure), err=True)
+        return failure.exit_code
+    except KeyboardInterrupt:
+        typer.echo("interrupted before any work was dispatched", err=True)
+        return EXIT_INTERRUPTED
 
 
 def _dispatch_undo(run_id: str | None) -> int:

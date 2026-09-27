@@ -22,6 +22,12 @@ def content_hash(path: Path) -> str:
     return digest.hexdigest()
 
 
-def short_hash(digest: str) -> str:
-    """The first six hex characters of a content hash (AC-023)."""
-    raise NotImplementedError
+def short_hash(digest: str, *, length: int = SHORT_HASH_CHARS) -> str:
+    """The first six hex characters of a content hash (AC-023).
+
+    `length` exists only for the pathological case where six characters are not
+    enough to separate two names; collision resolution lengthens the suffix
+    rather than inventing a counter, so the result stays a function of the
+    contents (AC-024).
+    """
+    return digest[:length]

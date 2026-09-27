@@ -4,3 +4,5 @@
 {"slice":"S-02","attempt":1,"ok":true,"archetype":"cli-python","tamperedTests":[],"at":"2026-09-26T19:23:37.508Z"}
 {"slice":"S-03","attempt":1,"ok":true,"archetype":"cli-python","tamperedTests":[],"at":"2026-09-26T19:32:07.799Z"}
 {"slice":"S-01","attempt":1,"ok":true,"archetype":"cli-python","tamperedTests":[],"at":"2026-09-27T02:38:44.904Z"}
+{"slice":"S-04","attempt":1,"ok":false,"archetype":"cli-python","reason":"the test suite changed since it was locked: conftest.py","tamperedTests":["conftest.py"],"at":"2026-09-27T03:05:39.110Z"}
+{"slice":"S-04","attempt":2,"ok":true,"archetype":"cli-python","tamperedTests":[],"at":"2026-09-27T03:12:51.507Z"}

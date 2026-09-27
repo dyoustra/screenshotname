@@ -40,6 +40,12 @@ exclude = ['^\.venv/', '^build/', '^dist/']
 module = ["typer.testing"]
 implicit_reexport = true
 
+# `ocrmac` ships no type information, and it is the one library the stack table
+# names that does not. The import sits behind `VisionOcr.recognize` alone.
+[[tool.mypy.overrides]]
+module = ["ocrmac.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src", "."]
